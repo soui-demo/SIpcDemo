@@ -3,6 +3,46 @@
 #define LOG_FILTER "server"
 
 
+class GlobalMemory {
+	HGLOBAL hand;
+public:
+	void *ptr;
+	GlobalMemory() : hand(0), ptr(0) {
+	}
+	GlobalMemory(HGLOBAL hand_) : hand(hand_), ptr(0) {
+		if (hand) {
+			ptr = ::GlobalLock(hand);
+		}
+	}
+	~GlobalMemory() {
+		SASSERT(!ptr);
+	}
+	void Allocate(size_t bytes) {
+		hand = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, bytes);
+		if (hand) {
+			ptr = ::GlobalLock(hand);
+		}
+	}
+	HGLOBAL Unlock() {
+		SASSERT(ptr);
+		HGLOBAL handCopy = hand;
+		::GlobalUnlock(hand);
+		ptr = 0;
+		hand = 0;
+		return handCopy;
+	}
+	void SetClip(UINT uFormat) {
+		::SetClipboardData(uFormat, Unlock());
+	}
+	operator bool() const {
+		return ptr != 0;
+	}
+	SIZE_T Size() {
+		return ::GlobalSize(hand);
+	}
+};
+
+
 CSvrConnect::CSvrConnect(IIpcHandle * pHandle) :m_ipcHandle(pHandle)
 {
 }
