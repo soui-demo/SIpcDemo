@@ -5,12 +5,10 @@
 
 CSvrConnect::CSvrConnect(IIpcHandle * pHandle) :m_ipcHandle(pHandle)
 {
-	SLOG_INFO("new connection accepted,client id:"<<pHandle->GetRemoteId());
 }
 
 CSvrConnect::~CSvrConnect()
 {
-	SLOG_INFO("connection disconnected,client id:" << m_ipcHandle->GetRemoteId());
 	m_ipcHandle = NULL;
 }
 
@@ -23,6 +21,7 @@ void CSvrConnect::BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TC
 {
 	_stprintf(szBuf, DEMO_SHARE_BUF_NAME_FMT, (DWORD)(((LPARAM)idLocal) & 0xffffffff), (DWORD)(((LPARAM)idRemote) & 0xffffffff));
 }
+
 void CSvrConnect::OnAddInt(Param_AddInt & param)
 {
 	SLOG_INFO("execute add int, a: " << param.a << " b:" << param.b);
@@ -79,6 +78,7 @@ void CPageServer::OnInit(SWindow * pRoot)
 	SASSERT(pTxtSvr);
 	pTxtSvr->SetWindowText(SStringT().Format(_T("0x%08x"), (DWORD)hHost));
 	m_ipcSvr->Init((ULONG_PTR)hHost, this);
+	::SetTimer(hHost,100,50,NULL);
 }
 
 void CPageServer::onLog(int level, const char * filter, const SStringW &buf)
@@ -147,4 +147,25 @@ void * CPageServer::GetSecurityAttr() const
 
 void CPageServer::ReleaseSecurityAttr(void * psa) const
 {
+}
+
+void CPageServer::OnTimer(UINT_PTR id)
+{
+	if(id==100)
+	{
+		m_ipcSvr->CheckConnectivity();
+	}else
+	{
+		SetMsgHandled(FALSE);
+	}
+}
+
+void CPageServer::OnConnected(IIpcConnection * pConn)
+{
+	SLOG_INFO("new connection accepted,client id:"<<pConn->GetIpcHandle()->GetRemoteId());
+}
+
+void CPageServer::OnDisconnected(IIpcConnection * pConn)
+{
+	SLOG_INFO("connection disconnected,client id:" << pConn->GetIpcHandle()->GetRemoteId());
 }

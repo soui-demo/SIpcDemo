@@ -6,5 +6,5 @@
     <button name="btn_copy_id" text="copy" padding="10,5,10,5"/>
   </window>
   <button size="100,30" text="hello, all" name="btn_hello"/>
-  <richedit name="log_svr" size="-2,0" weight="1" multiLines="1" vscrollBar="1" hscrollbar="0" readOnly="1" autoVScrollbar="1"/>
+  <richedit name="log_svr" size="-2,0" weight="1" multiLines="1" vscrollBar="1" hscrollBar="1" readOnly="1" autoVScroll="1"  autoHScroll="0"/>
 </include>

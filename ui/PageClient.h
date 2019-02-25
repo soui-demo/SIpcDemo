@@ -5,16 +5,8 @@
 class CClientConnect : public IClient , public SOUI::TObjRefImpl<SOUI::IIpcConnection>
 {
 public:
-	CClientConnect()
-	{
-		CAutoRefPtr<IIpcFactory> ipcFac;
-		m_comMgr.CreateIpcObject((IObjRef**)&ipcFac);
-		ipcFac->CreateIpcHandle(&m_ipcHandle);
-	}
-	~CClientConnect()
-	{
-		m_ipcHandle = NULL;
-	}
+	CClientConnect();
+	~CClientConnect();
 
 public:
 	// Í¨¹ý IClient ¼Ì³Ð
@@ -70,7 +62,7 @@ private:
 	EVENT_MAP_BREAK()
 
 	BEGIN_MSG_MAP_EX(CPageClient)
-		CHAIN_MSG_MAP_2_IPC2(m_conn.GetIpcHandle())
+		CHAIN_MSG_MAP_2_IPC(m_conn.GetIpcHandle())
 	END_MSG_MAP()
 
 };

@@ -5,24 +5,38 @@
 
 
 
+CClientConnect::CClientConnect()
+{
+	CAutoRefPtr<IIpcFactory> ipcFac;
+	m_comMgr.CreateIpcObject((IObjRef**)&ipcFac);
+	ipcFac->CreateIpcHandle(&m_ipcHandle);
+	m_ipcHandle->SetIpcConnection(this);
+}
+
+
+CClientConnect::~CClientConnect()
+{
+	m_ipcHandle = NULL;
+}
+
+
 int CClientConnect::Add(int a, int b)
 {
-	SLOG_INFO("call add int, a:" << a << " b:" << b);
 	Param_AddInt params;
 	params.a = a;
 	params.b = b;
 	m_ipcHandle->CallFun(&params);
+	SLOG_INFO("call add int, a:" << a << " b:" << b<<" return="<<params.ret);
 	return params.ret;
 }
 
 std::string CClientConnect::Add(const std::string & a, const std::string & b)
 {
-	SLOG_INFO("call add string, a:" << a.c_str() << " b:" << b.c_str());
-
 	Param_AddString params;
 	params.a = a;
 	params.b = b;
 	m_ipcHandle->CallFun(&params);
+	SLOG_INFO("call add string, a:" << a.c_str() << " b:" << b.c_str()<<" return="<<params.ret.c_str());
 	return params.ret;
 }
 
@@ -47,7 +61,7 @@ void CClientConnect::OnAddBack(Param_AddBack & param)
 	std::stringstream ss;
 	ss << param.a << "_" << param.b << ":" << (param.a2 * 100 + param.b2);
 	param.ret = ss.str();
-	SLOG_INFO("server call add back: ret" << param.ret.c_str());
+	SLOG_INFO("server call add back: ret " << param.ret.c_str());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +114,7 @@ void CPageClient::OnConnect()
 	}
 	HWND hLocal = GetRoot()->GetContainer()->GetHostHwnd();
 	HRESULT hr = m_conn.GetIpcHandle()->ConnectTo((ULONG_PTR)hLocal, id);
-	SLOG_INFO("connect to server " << id << "return "<<hr);
+	SLOG_INFO("connect to server " << id << " return "<<hr);
 }
 
 void CPageClient::OnDisconnect()
@@ -111,10 +125,17 @@ void CPageClient::OnDisconnect()
 
 void CPageClient::OnAddInt()
 {
-	m_conn.Add(100, 200);
+	int a = _ttoi(FindChildByID(R.id.edit_int_a)->GetWindowText());
+	int b = _ttoi(FindChildByID(R.id.edit_int_b)->GetWindowText());
+	m_conn.Add(a, b);
 }
 
 void CPageClient::OnAddString()
 {
-	m_conn.Add("soui", "ipc");
+	SStringT a = FindChildByID(R.id.edit_str_a)->GetWindowText();
+	SStringT b = FindChildByID(R.id.edit_str_b)->GetWindowText();
+
+	SStringA strA = S_CT2A(a);
+	SStringA strB = S_CT2A(b);
+	m_conn.Add((LPCSTR)strA,(LPCSTR)strB);
 }

@@ -20,7 +20,7 @@ public:
 	FUN_BEGIN
 		FUN_HANDLER(Param_AddInt, OnAddInt)
 		FUN_HANDLER(Param_AddString, OnAddStr)
-		FUN_END
+	FUN_END
 private:
 	CAutoRefPtr<IIpcHandle> m_ipcHandle;
 
@@ -49,10 +49,14 @@ public:
 	virtual int GetBufSize() const override;
 	virtual void * GetSecurityAttr() const override;
 	virtual void ReleaseSecurityAttr(void * psa) const override;
+	virtual void OnConnected(IIpcConnection * pConn) override;
+	virtual void OnDisconnected(IIpcConnection * pConn) override;
 
 	void OnCopySvrId();
 
 	static void DoSayHello(IIpcConnection *pConn,ULONG_PTR data);
+
+
 	void OnHello();
 	EVENT_MAP_BEGIN()
 		EVENT_CHECK_SENDER_ROOT(GetRoot())
@@ -60,8 +64,11 @@ public:
 		EVENT_ID_COMMAND(R.id.btn_hello,OnHello)
 	EVENT_MAP_BREAK()
 
+
+	void OnTimer(UINT_PTR id);
 	BEGIN_MSG_MAP_EX(CPageServer)
-		CHAIN_MSG_MAP_2_IPC2(m_ipcSvr)
+		MSG_WM_TIMER(OnTimer)
+		CHAIN_MSG_MAP_2_IPC(m_ipcSvr)
 	END_MSG_MAP()
 
 };

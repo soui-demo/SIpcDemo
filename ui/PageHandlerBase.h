@@ -1,11 +1,5 @@
 #pragma once
 
-#define CHAIN_MSG_MAP_2_IPC2(ipc) \
-		if(ipc)\
-		{\
-			BOOL bHandled = FALSE;\
-			lResult = (ipc)->OnMessage((ULONG_PTR)hWnd,uMsg,wParam,lParam,bHandled);\
-		}
 
 class GlobalMemory {
 	HGLOBAL hand;
@@ -50,7 +44,7 @@ class CPageHandlerBase
 {
 public:
 	CPageHandlerBase();
-	~CPageHandlerBase();
+	virtual ~CPageHandlerBase();
 
 	virtual void OnInit(SWindow *pRoot)
 	{
@@ -100,6 +94,10 @@ public:
 	}
 
 	virtual void onLog(int level, const char * filter, const SStringT &buf) = 0;
+
+	virtual BOOL _HandleEvent(SOUI::EventArgs *pEvt) = 0;
+
+	virtual BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT & lResult, DWORD dwMsgMapID = 0) = 0;
 protected:
 	SWindow * m_pPageRoot;
 };
