@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <window size="-2,-1" layout="hbox" gravity="center" interval="5">
+    <text text="server id:"/>
+    <text name="txt_svr_id"/>
+    <button name="btn_copy_id" text="copy" padding="10,5,10,5"/>
+  </window>
+  <button size="100,30" text="hello, all" name="btn_hello"/>
+  <richedit name="log_svr" size="-2,0" weight="1" multiLines="1" vscrollBar="1" hscrollbar="0" readOnly="1" autoVScrollbar="1"/>
+</include>

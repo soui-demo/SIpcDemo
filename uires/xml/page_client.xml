@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <window size="-2,-1" layout="hbox" gravity="center" interval="5">
+    <text text="server id:"/>
+    <edit name="edit_svr_id" size="100,30"/>
+    <button name="btn_connect" text="connect to server" padding="10,5,10,5"/>
+    <button name="btn_disconnect" text="disconnect" padding="10,5,10,5"/>
+  </window>
+  <button size="100,30" text="Add Int" name="btn_add_int"/>
+  
+  <button size="100,30" text="Add String" name="btn_add_str"/>
+  
+  <richedit name="log_client" size="-2,0" weight="1" multiLines="1" vscrollBar="1" hscrollbar="0" readOnly="1" autoVScrollbar="1"/>
+</include>
