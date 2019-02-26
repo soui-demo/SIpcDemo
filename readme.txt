@@ -1,39 +1,58 @@
-========================================================================
-SIpcDemo 项目概述
-========================================================================
+SIpcDemo is a ipc demo using SIpcObject. this demo depends on soui. Soui is a direct UI library and can be found from https://github.com/soui2/soui.git.
 
-SOUI向导 已创建此 SIpcDemo 项目作为起点。
+SIpcObject is a IPC component. Related headers were placed in soui.src/soui/include/interface, where soui.src is the folder you had cloned soui repository. Actually, SIpcObject does not depend on SOUI, and you can extract it from soui without any trouble.
 
-本文件概要介绍组成项目的每个文件的内容。
+After you had finished constructing the IPC framework, using IpcObject, making a IPC call will be as simple as calling a normal function.
 
-
-license.txt
-SOUI license，发布请带上，tks！SOUI使用(MIT)协议，商业个人完全免费，使用请带上license.txt。感觉启程软件的无私！
-
-ReadMe.txt
-些项目的简要说明。
-
-SIpcDemo.cpp
-程序主入口，SOUI的各种资源初使化及在此文件。
-
-MainDlg.h
-这是一个示例的默认窗口模板文件的头定义文件。
-
-MainDlg.cpp
-这是一个示例的默认窗口模板文件的实现文件。
+To make a IPC call, we need deine a struct which delieved from SOUI::IFunParams at first as demo.
 
 
-stdafx.h
-预处理头文件。
+struct FunParams_Base : SOUI::IFunParams
+{
+	virtual void ToStream4Input(SOUI::SParamStream &  ps) {}
+	virtual void ToStream4Output(SOUI::SParamStream &  ps) {}
+	virtual void FromStream4Input(SOUI::SParamStream &  ps) {}
+	virtual void FromStream4Output(SOUI::SParamStream &  ps) {}
+};
 
-stdafx.cpp
-为了预处理头文件被编译器编译而生。
+struct Param_AddInt : FunParams_Base
+{
+	int a, b;
+	int ret;
+	FUNID(CID_AddInt)
+		PARAMS2(Input, a,b)
+		PARAMS1(Output,ret)
+};
 
-/////////////////////////////////////////////////////////////////////////////
-其他注释：
-uires 文件夹下保存所有SOUI的资源定义与资源文件！
-res/soui_res.rc2 该文件由uiresbuilder生成，请不要手动修改!
-/////////////////////////////////////////////////////////////////////////////
+Here, FunParams_Base is used to provide a empty implementation for all of interfaces of IFunParams, and Param_AddInt is the actual IPC call parameters object.
 
-特别提示：透明窗口上不能放置真窗口(包括但不限于IE这样的控件),如果是ActiveX要看其具体实现，如果其内部会创建子窗口仍会无法正常显示。
-重要说明：SOUI非线程安全，要刷新窗口必须要UI线程。
+We defined a serial of macro to simplify implementing interfaces of IFunParams. FUNID is used to define the IPC call id.
+PARAMx is used to implement serailize of parameters, where x can be from 1 to 5, and you can extend it to any number as you need. The first parameter must be "input" or "output". "input" means the parameter is input parameter and "output" means the parameter is used to save returns. A parameter can be both "input" and "output".
+
+OK, you can call the IPC function from client by using IIpcHandle->CallFun(&Param_AddInt).
+
+Now let us have a look of SOUI::IIpcConnection
+struct IIpcConnection : IObjRef
+	{
+		virtual IIpcHandle * GetIpcHandle() = 0;
+		virtual bool HandleFun(UINT uFunID, SParamStream & ps) = 0;
+		virtual void BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TCHAR szBuf[MAX_PATH]) const = 0;
+	};
+  
+To response for client call, at server client, we implement virtual function HandleFun by using macro FUN_BEGIN and FUN_END as used in demo.
+
+  void OnAddInt(Param_AddInt & param)
+  {
+  	param.ret = param.a + param.b;
+  }
+  
+	FUN_BEGIN
+		FUN_HANDLER(Param_AddInt, OnAddInt)
+	FUN_END
+
+It's all. Wish it may be useful to you!
+
+2019.2.26
+  
+  
+
