@@ -39,7 +39,7 @@ struct IIpcConnection : IObjRef
 		virtual void BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TCHAR szBuf[MAX_PATH]) const = 0;
 	};
   
-To response for client call, at server client, we implement virtual function HandleFun by using macro FUN_BEGIN and FUN_END as used in demo.
+To response for client call, at server endpoint, we implement virtual function HandleFun by using macro FUN_BEGIN and FUN_END as used in demo.
 
   void OnAddInt(Param_AddInt & param)
   {
