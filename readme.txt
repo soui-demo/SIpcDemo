@@ -29,7 +29,7 @@ Here, FunParams_Base is used to provide a empty implementation for all of interf
 We defined a serial of macro to simplify implementing interfaces of IFunParams. FUNID is used to define the IPC call id.
 PARAMx is used to implement serailize of parameters, where x can be from 1 to 5, and you can extend it to any number as you need. The first parameter must be "input" or "output". "input" means the parameter is input parameter and "output" means the parameter is used to save returns. A parameter can be both "input" and "output".
 
-OK, you can call the IPC function from client by using IIpcHandle->CallFun(&Param_AddInt).
+OK, you can call the IPC function from client by using IIpcHandle->CallFun(&Param_AddInt) now.
 
 Now let us have a look of SOUI::IIpcConnection
 struct IIpcConnection : IObjRef
@@ -50,7 +50,7 @@ To response for client call, at server endpoint, we implement virtual function H
 		FUN_HANDLER(Param_AddInt, OnAddInt)
 	FUN_END
 
-It's all. Wish it may be useful to you!
+It's all. Wish it be useful to you!
 
 2019.2.26
   
