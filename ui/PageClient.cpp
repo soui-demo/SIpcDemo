@@ -62,6 +62,12 @@ void CClientConnect::OnAddBack(Param_AddBack & param)
 	ss << param.a << "_" << param.b << ":" << (param.a2 * 100 + param.b2);
 	param.ret = ss.str();
 	SLOG_INFO("server call add back: ret " << param.ret.c_str());
+	{
+		Param_AddInt param2;
+		param2.a = 500;
+		param2.b = 1000;
+		m_ipcHandle->CallFun(&param2);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
