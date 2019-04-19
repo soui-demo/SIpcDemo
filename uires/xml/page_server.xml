@@ -4,6 +4,7 @@
     <text text="server id:"/>
     <text name="txt_svr_id"/>
     <button name="btn_copy_id" text="copy" padding="10,5,10,5"/>
+    <button name="btn_clear_log" text="clear log" padding="10,5,10,5"/>
   </window>
   <button size="100,30" text="hello, all" name="btn_hello"/>
   <richedit name="log_svr" size="-2,0" weight="1" multiLines="1" vscrollBar="1" hscrollBar="1" readOnly="1" autoVScroll="1"  autoHScroll="0"/>

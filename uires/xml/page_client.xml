@@ -5,22 +5,27 @@
     <edit name="edit_svr_id" size="100,30"/>
     <button name="btn_connect" text="connect to server" padding="10,5,10,5"/>
     <button name="btn_disconnect" text="disconnect" padding="10,5,10,5"/>
+    <button name="btn_clear_log" text="clear log" padding="10,5,10,5"/>
   </window>
-  <window size="-2,-1" layout="hbox" interval="5" gravity="center">
+  <window size="-2,-1" layout="gridlayout" xInterval="5" yInterval="5"  columnCount="5" gravity="fill">
     <button size="100,30" text="Add Int" name="btn_add_int"/>
     <text text="param.a:"/>
     <edit name="edit_int_a" size="100,30" text="100"/>
     <text text="param.b:"/>
     <edit name="edit_int_b" size="100,30" text="200"/>
-  </window>
 
-  <window size="-2,-1" layout="hbox" interval="5" gravity="center">
     <button size="100,30" text="Add String" name="btn_add_str"/>
     <text text="param.a:"/>
     <edit name="edit_str_a" size="100,30" text="soui"/>
     <text text="param.b:"/>
     <edit name="edit_str_b" size="100,30" text="ipc"/>
+ 
+    <button size="100,30" text="sum(1,n)" name="btn_sum"/>
+    <text text="param.n:"/>
+    <edit name="edit_n" size="100,30" text="38"/>
+    <text text="result:"/>
+    <edit name="edit_sum" size="100,30" readOnly="1"/>
   </window>
-
+  
   <richedit name="log_client" size="-2,0" weight="1" multiLines="1" vscrollBar="1" hscrollBar="1" readOnly="1" autoVScroll="1"  autoHScroll="0"/>
 </include>

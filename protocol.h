@@ -65,6 +65,7 @@ struct IClient
 {
 	virtual int Add(int a, int b) = 0;
 	virtual std::string Add(const std::string & a, const std::string & b) = 0;
+	virtual int Sum(int n) = 0;
 };
 
 struct IServer
@@ -79,6 +80,8 @@ enum {
 
 	SID_Hello,
 	SID_AddBack,
+
+	BID_Sum,
 };
 
 struct Param_AddInt : FunParams_Base
@@ -114,4 +117,13 @@ struct Param_AddBack : FunParams_Base
 	FUNID(SID_AddBack)
 		PARAMS4(Input, a,b,a2,b2)
 		PARAMS1(Output,ret)
+};
+
+struct Param_Sum : FunParams_Base
+{
+	int n;
+	int nRet;
+	FUNID(BID_Sum)
+		PARAMS1(Input, n)
+		PARAMS1(Output, nRet)
 };

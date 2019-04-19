@@ -95,6 +95,25 @@ std::string CSvrConnect::AddBack(const std::string & a, const std::string & b, i
 	return param.ret;
 
 }
+
+
+void CSvrConnect::OnSum(Param_Sum & param)
+{
+	//recursive call to calc sum (1,n);
+	SASSERT(param.n >= 1);
+	if (param.n == 1)
+	{
+		param.nRet = 1;
+	}
+	else
+	{
+		Param_Sum p2;
+		p2.n = param.n - 1;
+		m_ipcHandle->CallFun(&p2);
+		param.nRet = param.n + p2.nRet;
+		SLOGFMTD("sum(1,%d)=%d", p2.n, p2.nRet);
+	}
+}
 ///////////////////////////////////////////////////////////////////
 CPageServer::CPageServer()
 {
@@ -170,6 +189,11 @@ void CPageServer::OnHello()
 	m_ipcSvr->EnumClient(&CPageServer::DoSayHello,(ULONG_PTR)this);
 }
 
+void CPageServer::OnClearLog()
+{
+	m_pLogView->SetWindowText(NULL);
+}
+
 void CPageServer::OnNewConnection(IIpcHandle * pIpcHandle, IIpcConnection ** ppConn)
 {
 	*ppConn = new CSvrConnect(pIpcHandle);
@@ -177,7 +201,7 @@ void CPageServer::OnNewConnection(IIpcHandle * pIpcHandle, IIpcConnection ** ppC
 
 int CPageServer::GetBufSize() const
 {
-	return 1000;
+	return 1024;
 }
 
 void * CPageServer::GetSecurityAttr() const

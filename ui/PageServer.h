@@ -17,9 +17,11 @@ public:
 
 	void OnAddInt(Param_AddInt & param);
 	void OnAddStr(Param_AddString & param);
+	void OnSum(Param_Sum & param);
 	FUN_BEGIN
 		FUN_HANDLER(Param_AddInt, OnAddInt)
 		FUN_HANDLER(Param_AddString, OnAddStr)
+		FUN_HANDLER(Param_Sum,OnSum)
 	FUN_END
 private:
 	CAutoRefPtr<IIpcHandle> m_ipcHandle;
@@ -58,10 +60,12 @@ public:
 
 
 	void OnHello();
+	void OnClearLog();
 	EVENT_MAP_BEGIN()
 		EVENT_CHECK_SENDER_ROOT(GetRoot())
 		EVENT_ID_COMMAND(R.id.btn_copy_id,OnCopySvrId)
 		EVENT_ID_COMMAND(R.id.btn_hello,OnHello)
+		EVENT_ID_COMMAND(R.id.btn_clear_log,OnClearLog)
 	EVENT_MAP_BREAK()
 
 

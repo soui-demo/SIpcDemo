@@ -12,7 +12,7 @@ public:
 	// 通过 IClient 继承
 	virtual int Add(int a, int b) override;
 	virtual std::string Add(const std::string & a, const std::string & b) override;
-
+	virtual int Sum(int n) override;
 
 public:
 	// 通过 TObjRefImpl 继承
@@ -21,9 +21,11 @@ public:
 
 	void OnHello(Param_Hello & param);
 	void OnAddBack(Param_AddBack & param);
+	void OnSum(Param_Sum &param);
 	FUN_BEGIN
 		FUN_HANDLER(Param_Hello, OnHello)
 		FUN_HANDLER(Param_AddBack, OnAddBack)
+		FUN_HANDLER(Param_Sum,OnSum)
 	FUN_END
 private:
 	CAutoRefPtr<IIpcHandle> m_ipcHandle;
@@ -52,13 +54,17 @@ private:
 	void OnDisconnect();
 	void OnAddInt();
 	void OnAddString();
+	void OnSum();
+	void OnClearLog();
 
 	EVENT_MAP_BEGIN()
 		EVENT_CHECK_SENDER_ROOT(GetRoot())
-		EVENT_ID_COMMAND(R.id.btn_connect,OnConnect)
-		EVENT_ID_COMMAND(R.id.btn_disconnect,OnDisconnect)
-		EVENT_ID_COMMAND(R.id.btn_add_int,OnAddInt)
-		EVENT_ID_COMMAND(R.id.btn_add_str,OnAddString)
+		EVENT_ID_COMMAND(R.id.btn_connect, OnConnect)
+		EVENT_ID_COMMAND(R.id.btn_disconnect, OnDisconnect)
+		EVENT_ID_COMMAND(R.id.btn_add_int, OnAddInt)
+		EVENT_ID_COMMAND(R.id.btn_add_str, OnAddString)
+		EVENT_ID_COMMAND(R.id.btn_sum, OnSum);
+		EVENT_ID_COMMAND(R.id.btn_clear_log,OnClearLog)
 	EVENT_MAP_BREAK()
 
 	BEGIN_MSG_MAP_EX(CPageClient)
