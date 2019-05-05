@@ -115,7 +115,7 @@ if %specs%==win32-msvc2017 (
 	%SOUIPATH%\tools\qmake -tp vc -r -spec %SOUIPATH%\tools\mkspecs\%specs% "CONFIG += !cfg! "
 )
 
-call devenv iectrl.%proj_ext%
+call devenv sipcdemo.%proj_ext%
 
 goto :eof
 
